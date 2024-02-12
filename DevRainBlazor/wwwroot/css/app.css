@@ -1,6 +1,86 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    font-variation-settings: normal;
+    -webkit-tap-highlight-color: transparent;
+    font-feature-settings: normal;
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
+    background-color: #0093E9;
+    min-height: 100vh;
+    background-image: linear-gradient(180deg, #7085B6 0%, #87A7D9 10%, #DEF3F8 100%);
 }
+
+.invisible-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.loading-view {
+    background-color: #0093E9;
+    background-image: linear-gradient(180deg, #7085B6 0%, #87A7D9 10%, #DEF3F8 100%);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+footer, nav {
+    background-image: linear-gradient(180deg, #DEF3F8 0%, #87A7D9 4%, #7085B6 100%);
+    color: #f3f2fa;
+}
+
+.bg-flower-blue {
+    background-color: cornflowerblue;
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    margin: 0 15px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0,0,0,.85)
+}
+
+.nav-link {
+    color: rgba(0,0,0,.85)
+}
+
+section {
+    padding-top: 30px;
+}
+section.features {
+    margin-bottom: 30px;
+}
+
+.feature {
+    margin-bottom: 20px;
+}
+
+.company-info {
+    font-size: 1.5rem;
+}
+
+.table-bordered {
+    background-color: whitesmoke;
+}
+
+.flex-fill {
+    flex: 1 1 auto;
+}
+
 
 h1:focus {
     outline: none;
@@ -33,7 +113,7 @@ a, .btn-link {
 }
 
 .validation-message {
-    color: red;
+    color: #b81414;
 }
 
 #blazor-error-ui {

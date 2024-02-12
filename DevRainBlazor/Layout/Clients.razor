@@ -1,0 +1,88 @@
+﻿@using DevRain.DevRainBlazor.Components
+@using DevRain.DevRainBlazor.Services
+@using System.Web
+@using System.Linq
+@using System.Runtime.CompilerServices
+@inject FeedbackService feedbackService
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 p-3 p-md-2 text-center">
+            <h1>Featured Clients</h1>
+        </div>
+    </div>
+    <div class="row text-center mb-2">
+        <div class="col-md-4 p-3">
+            <div class="p-3 p-md-2 ">
+                <img class=" lazyloaded"  alt="Microsoft" src="https://devrain.com/img/companies/microsoft-black.svg">
+            </div> 
+        </div>
+
+        <div class="col-md-4 p-3">
+            <div class="p-3 p-md-2">
+                <img class=" lazyloaded" alt="Kyivstar" src="https://devrain.com/img/companies/kyivstar-black.svg">
+            </div>
+        </div>
+
+        <div class="col-md-4 p-3">
+            <div class="p-3 p-md-2">
+                <img class=" lazyloaded" alt="Metinvest" src="https://devrain.com/img/companies/metinvest-black.svg">
+            </div>
+        </div>
+    </div>
+    @if (feedbacks != null)
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var feedback in feedbacks)
+            {
+              <div class="col">
+                    <div class="card border-dark h-100 ">
+                    <div class="card-header">@feedback.Company</div>
+                    <div class="card-body text-dark">
+                        <h5 class="card-title">@feedback.FullName</h5>
+                        <p class="card-text">@feedback.Text</p>
+                    </div>
+                </div>
+              </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<DevRain.Shared.Feedback> feedbacks;
+    private String errors = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        using (var client = new HttpClient())
+        {
+            try
+            {
+                await Getfeedbacks();
+            }
+            catch (Exception ex)
+            {
+                errors = ex.Message;
+            }
+        }
+    }
+
+    private async Task Getfeedbacks()
+    {
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        query["top"] = "3";
+        string filters = query.ToString();
+
+        try
+        {
+            feedbacks = await feedbackService.getFeedbacks(filters);
+        }
+        catch (Exception ex)
+        {
+            errors = ex.Message;
+        }
+
+        StateHasChanged();
+    }
+}

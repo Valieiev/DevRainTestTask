@@ -1,0 +1,329 @@
+﻿@page "/feedback-overview"
+
+@using DevRain.DevRainBlazor.Components
+@using DevRain.DevRainBlazor.Services
+@using System.Web
+@using System.Linq
+@using System.Runtime.CompilerServices
+@using ChartJs.Blazor.PieChart
+@using ChartJs.Blazor.BarChart
+@inject FeedbackService FeedbackService
+
+
+
+<section>
+    <div class="jumbotron container mt-5"> 
+        @if (_feedBacks == null)
+        {
+            <div class="d-flex align-items-center">
+                <strong>Loading...</strong>
+                <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+            </div>
+        }
+        else
+        {
+            @if (!string.IsNullOrEmpty(errors))
+            {
+                <div class="col-md-6 h6">
+                    <div class="p-2 alert alert-danger" role="alert">@errors</div>
+                </div>
+            }
+            else
+            {
+                <div class="table table-responsive table-bordered">
+                    <form class="jumbotron container">
+                        <div class="row">
+                            <div class="col">
+                                <label>Start Date:</label>
+                                <input id="startDate" @bind=StartDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="Start Date" />
+                            </div>
+                            <div class="col">
+                                <label>End Date:</label>
+                                <input id="startDate" @bind=EndDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="End Date" />
+                            </div>
+                            @if (PageCount() > 1)
+                            {
+                                <div class="col">
+                                    <label></label>
+                                    <ul class="pagination justify-content">
+                                        <li class="page-item @(previousBtnDisabled ? "disabled" : "")" disabled=@previousBtnDisabled>
+                                            <a class="page-link" tabindex="-1" @onclick=Previous>Previous</a>
+                                        </li>
+                                        <li class="page-item @(nextBtnDisabled ? "disabled" : "")" disabled=@(()=> Page == PageCount())>
+                                            <a class="page-link" @onclick=Next>Next</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].FullName)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].Company)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].Email)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].Text)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].Sentiment)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].PositiveScore)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].NeutralScore)" /></th>
+                                <th><DisplayName class="col-sm-2 col-form-label text-end" For="@(() => _feedBacks[0].NegativeScore)" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var feedback in showedFeedbacks)
+                            {
+                                <tr>
+                                    <td>@feedback.FullName</td>
+                                    <td>@feedback.Company</td>
+                                    <td>@feedback.Email</td>
+                                    <td>@feedback.Text</td>
+                                    <td>@feedback.Sentiment</td>
+                                    <td>@feedback.PositiveScore</td>
+                                    <td>@feedback.NeutralScore</td>
+                                    <td>@feedback.NegativeScore</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col">
+                        <Chart Config="_pieConfig"> </Chart>
+                    </div>
+                    <div class="col">
+                        <Chart Config="_barConfig"></Chart>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+@code {
+    private List<DevRain.Shared.Feedback> _feedBacks;
+    private PieConfig _pieConfig;
+    private BarConfig _barConfig;
+    private List<DevRain.Shared.Feedback> showedFeedbacks = new List<DevRain.Shared.Feedback>();
+
+    private int _page  = 1;
+    public int Page
+    {
+        get => _page;
+        set
+        {
+            _page = value;
+            if(value == PageCount())
+            {
+                nextBtnDisabled = true;
+            }
+            else
+            {
+                nextBtnDisabled = false;
+            }
+            if(value == 1)
+            {
+                previousBtnDisabled = true;
+            } else
+            {
+                previousBtnDisabled = false;
+            }
+            StateHasChanged();
+        }
+    }
+    private int _pageSize = 5;
+    private String errors = "";
+    private DateOnly StartDate = DateOnly.FromDateTime(DateTime.Now).AddYears(-1);
+    private DateOnly EndDate = DateOnly.FromDateTime(DateTime.Now);
+
+    private bool previousBtnDisabled = true;
+    private bool nextBtnDisabled = false;
+
+    protected override async Task OnInitializedAsync ()
+    {
+        using (var client = new HttpClient())
+        {
+            try
+            {
+                await GetFeedbacks();
+            }
+            catch (Exception ex)
+            {
+                errors = ex.Message;
+            }
+        }
+
+    }
+
+    private async Task GetFeedbacks()
+    {
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        query["startDate"] = StartDate.ToString();
+        query["endDate"] = EndDate.ToString();
+        string filters = query.ToString();
+
+        try {
+            _feedBacks = await FeedbackService.getFeedbacks(filters);
+            if (_feedBacks.Count > PageCount())
+            {
+                showedFeedbacks = (List<DevRain.Shared.Feedback>)_feedBacks.Take(_pageSize).ToList();
+            } else
+            {
+                showedFeedbacks = _feedBacks;
+            }
+            ConfigurePieConfig(_feedBacks);
+            ConfigureBarConfig(_feedBacks);
+        } catch(Exception ex)
+        {
+            errors = ex.Message;
+        }
+
+        StateHasChanged();
+    }
+
+    private void ConfigurePieConfig(List<DevRain.Shared.Feedback> feedbacks)
+    {
+        Dictionary<string, int> Marks = new Dictionary<string, int>()
+        {
+            { "Positive", feedbacks.Where(x=> string.Equals(x.Sentiment,"Positive")).Count()},
+            { "Neutral", feedbacks.Where(x=> string.Equals(x.Sentiment,"Neutral")).Count()},
+            { "Mixed", feedbacks.Where(x=> string.Equals(x.Sentiment,"Mixed")).Count()},
+            { "Negative", feedbacks.Where(x=> string.Equals(x.Sentiment,"Negative")).Count()}
+        };
+
+        if (_pieConfig == null)
+        {
+            _pieConfig = new PieConfig();
+        } 
+        else
+        {
+            _pieConfig.Data.Datasets.Clear();
+            _pieConfig.Data.Labels.Clear();
+        }
+
+
+        _pieConfig.Options = new PieOptions()
+            {
+                Responsive = true,
+                Title = new ChartJs.Blazor.Common.OptionsTitle
+                {
+                    Display = false
+                }
+            };
+        foreach (string label in Marks.Keys)
+        {
+            _pieConfig.Data.Labels.Add(label);
+        }
+
+        PieDataset<int> dataset = new PieDataset<int>(Marks.Values)
+        {
+            BackgroundColor = new[]
+            {
+            ColorUtil.FromDrawingColor(System.Drawing.Color.ForestGreen),
+            ColorUtil.FromDrawingColor(System.Drawing.Color.SlateGray),
+            ColorUtil.FromDrawingColor(System.Drawing.Color.Yellow),
+            ColorUtil.FromDrawingColor(System.Drawing.Color.OrangeRed)
+            }
+        };
+
+        _pieConfig.Data.Datasets.Add(dataset);
+    }
+
+    private void ConfigureBarConfig(List<DevRain.Shared.Feedback> feedbacks)
+    {
+        Dictionary<string, int> Marks = new Dictionary<string, int>()
+        {
+            { "Positive", feedbacks.Where(x=> string.Equals(x.Sentiment,"Positive")).Count()},
+            { "Neutral", feedbacks.Where(x=> string.Equals(x.Sentiment,"Neutral")).Count()},
+            { "Mixed", feedbacks.Where(x=> string.Equals(x.Sentiment,"Mixed")).Count()},
+            { "Negative", feedbacks.Where(x=> string.Equals(x.Sentiment,"Negative")).Count()}
+        };
+
+        Dictionary<string, string> Colors = new Dictionary<string, string>()
+        {
+            { "Positive", ColorUtil.FromDrawingColor(System.Drawing.Color.ForestGreen)},
+            { "Neutral", ColorUtil.FromDrawingColor(System.Drawing.Color.SlateGray)},
+            { "Mixed", ColorUtil.FromDrawingColor(System.Drawing.Color.Yellow)},
+            { "Negative", ColorUtil.FromDrawingColor(System.Drawing.Color.OrangeRed)}
+        };
+
+        if (_barConfig == null)
+        {
+            _barConfig = new BarConfig();
+        }
+        else
+        {
+            _barConfig.Data.Datasets.Clear();
+            _barConfig.Data.Labels.Clear();
+        }
+
+
+        _barConfig.Options = new BarOptions()
+            {
+                Responsive = true,
+                Legend = new Legend
+                {
+                    Position = Position.Top
+                },
+                Title = new ChartJs.Blazor.Common.OptionsTitle
+                {
+                    Display = false
+                },
+                Scales = new BarScales()
+                {
+                    YAxes = new List<CartesianAxis>()
+                {
+                    new LinearCartesianAxis
+                    {
+                        Ticks = new LinearCartesianTicks()
+                        {
+                            BeginAtZero = true,
+                            StepSize = 1
+                        }
+                    }
+                }
+            }
+        };
+
+        foreach (KeyValuePair<string, int> mark in Marks)
+        {
+            BarDataset<int> dateSet = new BarDataset<int>([mark.Value])
+            {
+                Label = mark.Key,
+                BackgroundColor = Colors[mark.Key]
+            };
+            _barConfig.Data.Datasets.Add(dateSet);
+        }
+    }
+
+    private void Next()
+    {
+        if(Page < PageCount())
+        {
+            Page++;
+            showedFeedbacks = (List<DevRain.Shared.Feedback>)_feedBacks.Skip(Page * _pageSize - _pageSize).Take(_pageSize).ToList();
+        }
+        StateHasChanged();
+    }
+
+    private void Previous()
+    {
+        if(Page > 1)
+        {
+            Page--;
+            showedFeedbacks = (List<DevRain.Shared.Feedback>)_feedBacks.Skip(Page * _pageSize - _pageSize).Take(_pageSize).ToList();
+        }
+        StateHasChanged();
+    }
+
+    private int PageCount()
+    {
+        int pageCount = _feedBacks.Count() / _pageSize;
+        if (_feedBacks.Count() % _pageSize > 0)
+        {
+            pageCount++;
+        }
+        return pageCount;
+    }
+
+}

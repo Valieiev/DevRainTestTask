@@ -1,0 +1,101 @@
+﻿@using DevRain.DevRainBlazor.Components
+@using DevRain.DevRainBlazor.Services
+@inject ILogger<DevRain.Shared.Feedback> Logger
+@inject FeedbackService FeedbackService
+
+<footer class="container-fluid pt-5 pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 h6">
+                <div class="d-flex flex-column">
+                    <div class="p-2">Email: test@email.com</div>
+                    <div class="p-2">Phone number: 000-000-00-00</div>
+                    <div class="p-2">Address: Country City Street</div>
+                </div>
+            </div>
+            @if (feedbackSended == false && string.IsNullOrEmpty(errors))
+            {
+            <div class="col-md-6 h6">
+                <EditForm Model="@feedback" OnValidSubmit="@Submit">
+                    <DataAnnotationsValidator />
+        
+                <div class="form-group row">
+                        <DisplayName class="col-sm-2 col-form-label text-end" For="@(() => feedback.Email)" />
+                        <div class="col-sm-10">
+                        <InputText class="form-control" type="email" placeholder="Enter email" @bind-Value="feedback!.Email" />
+                        <ValidationMessage For="() => feedback!.Email" />
+                        </div>
+                    </div>
+
+                <div class ="form-group row">
+                    <DisplayName class="col-sm-2 col-form-label text-end" For="@(() => feedback.FullName)" />
+                    <div class="col-sm-10">
+                        <InputText class="form-control"  placeholder="Enter full name" @bind-Value="feedback!.FullName" />
+                        <ValidationMessage For="() => feedback!.FullName" />
+                        </div>
+                </div>
+
+                <div class="form-group row">
+                    <DisplayName class="col-sm-2 col-form-label text-end" For="@(() => feedback.Company)" />
+                    <div class="col-sm-10">
+                        <InputText class="form-control" placeholder="Enter company name"  @bind-Value="feedback!.Company" />
+                        <ValidationMessage For="() => feedback!.Company" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <DisplayName class="col-sm-2 col-form-label text-end" For="@(() => feedback.Text)" />
+                    <div class="col-sm-10">
+                        <InputTextArea class="form-control" placeholder="Leave your feedback" rows="3" @bind-Value="feedback!.Text" />
+                        <ValidationMessage For="() => feedback!.Text" />
+                        </div>
+                </div>
+                    <div class="d-flex justify-content-end mt-1">
+                        <button type="submit" class="btn btn-primary align-content-end">Send your feedback</button>
+                    </div>
+                </EditForm>
+            </div>
+            }
+            else
+            {
+                @if (feedbackSended == true && string.IsNullOrEmpty(errors))
+                {
+                    <div class="col-md-6 h6">
+                        <div class="p-2 alert alert-success" role="alert">Thanks for leaving your feedback</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-6 h6">
+                        <div class="p-2 alert alert-danger" role="alert">@errors</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</footer>
+
+@code {
+    private DevRain.Shared.Feedback? feedback = new DevRain.Shared.Feedback();
+    private Boolean feedbackSended = false;
+    private String errors = "";
+
+    private async void Submit()
+    {
+        Logger.LogInformation("Email = {Email} FullName = {FullName} " +
+        "Company = {Company} Text = " +
+        "{Text}",
+        feedback?.Email, feedback?.FullName, feedback?.Company,
+        feedback?.Text);
+
+        try
+        {
+            await FeedbackService.leaveFeedback(feedback);
+        } 
+        catch(Exception ex)
+        {
+            errors = ex.Message;
+        }
+        feedbackSended = true;
+        StateHasChanged();
+    }
+}

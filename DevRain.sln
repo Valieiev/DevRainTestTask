@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevRainBlazor", "DevRainBlazor\DevRainBlazor.csproj", "{D2F9EB80-685D-486D-A749-C5442C56ACE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevRainAPI", "DevRainAPI\DevRainAPI.csproj", "{F1DEADAE-7966-421C-8E93-CE405BB13329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevRainAPI", "DevRainAPI\DevRainAPI.csproj", "{F1DEADAE-7966-421C-8E93-CE405BB13329}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{94F29EFF-22A3-4114-A170-2F36D2E77707}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{94F29EFF-22A3-4114-A170-2F36D2E77707}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
