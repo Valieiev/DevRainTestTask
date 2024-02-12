@@ -40,9 +40,10 @@ namespace DevRainAPI
                 await _dbContext.SaveChangesAsync();
 
                 return new OkResult();
-            } catch
+            }
+            catch (Exception ex)
             {
-                return new StatusCodeResult(500);
+                return new BadRequestObjectResult(ex.Message);
             }
         }
     }

@@ -24,33 +24,40 @@ namespace DevRainAPI
         [Function("GetFeedbacks")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            IQueryable<Feedback> queryableFeedbacks = _dbContext.Feedbacks.AsQueryable();
-
-            if (!string.IsNullOrEmpty(req.Query["startDate"]))
+            try
             {
-                DateOnly startDateFilter = DateOnly.Parse(req.Query["startDate"]);
-                queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
-            }
+                IQueryable<Feedback> queryableFeedbacks = _dbContext.Feedbacks.AsQueryable();
 
-            if (!string.IsNullOrEmpty(req.Query["endDate"]))
-            {
-                DateOnly endDateFilter = DateOnly.Parse(req.Query["endDate"]);
-                queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
-            }
-
-
-            if (!string.IsNullOrEmpty(req.Query["top"]))
-            {
-                if (int.TryParse(req.Query["top"], out _))
+                if (!string.IsNullOrEmpty(req.Query["startDate"]))
                 {
-                    queryableFeedbacks = queryableFeedbacks.OrderByDescending(feedback => feedback.PositiveScore).Take(int.Parse(req.Query["top"]));
+                    DateOnly startDateFilter = DateOnly.Parse(req.Query["startDate"]);
+                    queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
                 }
 
+                if (!string.IsNullOrEmpty(req.Query["endDate"]))
+                {
+                    DateOnly endDateFilter = DateOnly.Parse(req.Query["endDate"]);
+                    queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
+                }
+
+
+                if (!string.IsNullOrEmpty(req.Query["top"]))
+                {
+                    if (int.TryParse(req.Query["top"], out _))
+                    {
+                        queryableFeedbacks = queryableFeedbacks.OrderByDescending(feedback => feedback.PositiveScore).Take(int.Parse(req.Query["top"]));
+                    }
+
+                }
+
+                List<Feedback> feedbacks = await queryableFeedbacks.OrderByDescending(x => x.PositiveScore).ToListAsync();
+
+                return new OkObjectResult(feedbacks);
             }
-
-            List<Feedback> feedbacks =  await queryableFeedbacks.OrderByDescending(x=> x.PositiveScore).ToListAsync();
-
-            return new OkObjectResult(feedbacks);
+            catch(Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
         }
     }
 }
