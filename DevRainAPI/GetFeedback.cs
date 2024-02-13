@@ -24,12 +24,18 @@ namespace DevRainAPI
 
         [Function("GetFeedbacks")]
         [Authorize]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req, ClaimsPrincipal clientPrincipal)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req)
         {
+            _logger.LogInformation("Function triggered.");
+            _logger.LogInformation($"Headers: {JsonConvert.SerializeObject(req.Headers)}");
+
+            ClaimsPrincipal clientPrincipal = StaticWebAppsAuth.Parse(req);
+
+            _logger.LogInformation($"Claims: {JsonConvert.SerializeObject(clientPrincipal.Claims)}");
 
             if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
 
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(StaticWebAppsAuth.Parse(req)));
+                return new BadRequestObjectResult(clientPrincipal?.Identity?.Name);
             }
             try
             {
