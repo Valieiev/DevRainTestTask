@@ -1,4 +1,5 @@
 using DevRainAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,7 @@ namespace DevRainAPI
         }
 
         [Function("GetFeedbacks")]
+        [Authorize]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req, ClaimsPrincipal principal)
         {
             bool isClaimValid = true;
