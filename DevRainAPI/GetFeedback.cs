@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace DevRainAPI
@@ -30,13 +31,13 @@ namespace DevRainAPI
 
                 if (!string.IsNullOrEmpty(req.Query["startDate"]))
                 {
-                    DateOnly startDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd/MM/yyyy");
+                    DateOnly startDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
                 }
 
                 if (!string.IsNullOrEmpty(req.Query["endDate"]))
                 {
-                    DateOnly endDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd/MM/yyyy");
+                    DateOnly endDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
                 }
 
