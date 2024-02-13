@@ -1,4 +1,5 @@
 using DevRainAPI.Models;
+using DevRainAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace DevRainAPI
         {
 
             if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(clientPrincipal));
+                return new BadRequestObjectResult(StaticWebAppsAuth.Parse(req));
             }
             try
             {
