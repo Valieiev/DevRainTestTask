@@ -1,17 +1,11 @@
 using DevRainAPI.Models;
-using DevRainAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Authentication;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace DevRainAPI
@@ -33,7 +27,7 @@ namespace DevRainAPI
         {
 
             if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
-                return new BadRequestObjectResult(clientPrincipal) ;
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(clientPrincipal));
             }
             try
             {
