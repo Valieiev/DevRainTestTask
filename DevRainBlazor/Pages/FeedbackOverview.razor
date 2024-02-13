@@ -133,8 +133,8 @@
     }
     private int _pageSize = 5;
     private String errors = "";
-    private DateOnly StartDate = DateOnly.FromDateTime(DateTime.Now).AddYears(-1);
-    private DateOnly EndDate = DateOnly.FromDateTime(DateTime.Now);
+    private DateTime StartDate = DateTime.Now.AddYears(-1);
+    private DateTime EndDate = DateTime.Now;
 
     private bool previousBtnDisabled = true;
     private bool nextBtnDisabled = false;
@@ -158,8 +158,8 @@
     private async Task GetFeedbacks()
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
-        query["startDate"] = StartDate.ToString();
-        query["endDate"] = EndDate.ToString();
+        query["startDate"] = StartDate.ToString("yyyy-MM-dd");
+        query["endDate"] = EndDate.ToString("yyyy-MM-dd");
         string filters = query.ToString();
 
         try {

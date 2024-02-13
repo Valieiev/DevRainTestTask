@@ -24,7 +24,7 @@
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
-   "UseDateOnlyTimeOnly": true,
+   "UseDateTimeTimeOnly": true,
    "UseDbContextSplitting": false,
    "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": false,

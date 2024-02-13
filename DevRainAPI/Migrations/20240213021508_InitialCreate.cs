@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevRainAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,12 +15,12 @@ namespace DevRainAPI.Migrations
                 name: "Feedback",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     fullName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     company = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    createdDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     sentiment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     positiveScore = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     negativeScore = table.Column<decimal>(type: "decimal(5,2)", nullable: true),

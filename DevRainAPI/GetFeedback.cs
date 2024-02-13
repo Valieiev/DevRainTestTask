@@ -31,14 +31,14 @@ namespace DevRainAPI
 
                 if (!string.IsNullOrEmpty(req.Query["startDate"]))
                 {
-                    DateOnly startDateFilter = DateOnly.Parse(DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
+                    DateTime startDateFilter = DateTime.Parse(req.Query["startDate"]);
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
                 }
 
                 if (!string.IsNullOrEmpty(req.Query["endDate"]))
                 {
-                    DateOnly endDateFilter = DateOnly.Parse(DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
-                    queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
+                    DateTime endDateFilter = DateTime.Parse(req.Query["endDate"]);
+                    queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter.AddHours(24));
                 }
 
 
@@ -50,7 +50,6 @@ namespace DevRainAPI
                     }
 
                 }
-
                 List<Feedback> feedbacks = await queryableFeedbacks.OrderByDescending(x => x.PositiveScore).ToListAsync();
 
                 return new OkObjectResult(feedbacks);

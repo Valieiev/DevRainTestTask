@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevRainAPI.Migrations
 {
     [DbContext(typeof(DevRainDBContext))]
-    [Migration("20240210150034_Initial")]
-    partial class Initial
+    [Migration("20240213021508_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ namespace DevRainAPI.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("company");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
                         .HasColumnName("createdDate");
 
                     b.Property<string>("Email")

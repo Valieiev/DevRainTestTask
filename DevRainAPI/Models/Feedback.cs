@@ -34,8 +34,8 @@ public partial class Feedback
     [Column("text")]
     public string Text { get; set; }
 
-    [Column("createdDate", TypeName = "date")]
-    public DateOnly CreatedDate { get; set; }
+    [Column("createdDate", TypeName = "datetime2")]
+    public DateTime CreatedDate { get; set; }
 
     [Column("sentiment")]
     [StringLength(255)]

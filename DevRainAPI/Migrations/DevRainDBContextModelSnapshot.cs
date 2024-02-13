@@ -33,8 +33,8 @@ namespace DevRainAPI.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("company");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
                         .HasColumnName("createdDate");
 
                     b.Property<string>("Email")

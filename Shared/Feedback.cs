@@ -26,7 +26,7 @@ namespace DevRain.Shared
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
 
         [Display(Name = "Sentiment")]

@@ -26,12 +26,12 @@ namespace DevRainAPI
             try
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                Feedback feedback = JsonConvert.DeserializeObject<Feedback>(requestBody, new DateOnlyJsonConverter(typeof(DateOnly)));
+                Feedback feedback = JsonConvert.DeserializeObject<Feedback>(requestBody);
 
                 //According to the latest information received, 
                 //Azure DB does not support the NewID() function on the INSERT statement; 
                 feedback.Id = Guid.NewGuid();
-                feedback.CreatedDate = DateOnly.FromDateTime(DateTime.Now);
+                feedback.CreatedDate = DateTime.Now;
 
                 //Fill sentiment analysis data
                 await TextAnalyticsService.SentimentAnalysis(feedback);
