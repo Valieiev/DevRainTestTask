@@ -30,13 +30,13 @@ namespace DevRainAPI
 
                 if (!string.IsNullOrEmpty(req.Query["startDate"]))
                 {
-                    DateOnly startDateFilter = DateOnly.Parse(req.Query["startDate"]);
+                    DateOnly startDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd/MM/yyyy");
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
                 }
 
                 if (!string.IsNullOrEmpty(req.Query["endDate"]))
                 {
-                    DateOnly endDateFilter = DateOnly.Parse(req.Query["endDate"]);
+                    DateOnly endDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd/MM/yyyy");
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
                 }
 
