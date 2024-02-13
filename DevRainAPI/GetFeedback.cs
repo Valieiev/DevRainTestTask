@@ -31,13 +31,13 @@ namespace DevRainAPI
 
                 if (!string.IsNullOrEmpty(req.Query["startDate"]))
                 {
-                    DateOnly startDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    DateOnly startDateFilter = DateOnly.Parse(DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate >= startDateFilter);
                 }
 
                 if (!string.IsNullOrEmpty(req.Query["endDate"]))
                 {
-                    DateOnly endDateFilter = DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    DateOnly endDateFilter = DateOnly.Parse(DateOnly.ParseExact(req.Query["startDate"], "dd.MM.yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter);
                 }
 
