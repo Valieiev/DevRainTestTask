@@ -4,9 +4,9 @@
 <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity?.Name!
-        <a class="nav-link btn" href="/.auth/logout?post_logout_redirect_uri=/#company">Log out</a>
+        <a class="nav-link btn" href="/.auth/logout?post_logout_redirect_uri=/">Log out</a>
     </Authorized>
     <NotAuthorized>
-        <a class="nav-link btn" href="/.auth/login/aad?post_login_redirect_uri=/#company">Log in</a>
+        <a class="nav-link btn" href="/.auth/login/aad?post_login_redirect_uri=/">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
