@@ -24,7 +24,7 @@ namespace DevRainAPI
 
         [Function("GetFeedbacks")]
         [Authorize]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "secured/GetFeedbacks")] HttpRequest req)
         {
             _logger.LogInformation("Function triggered.");
             _logger.LogInformation($"Headers: {JsonConvert.SerializeObject(req.Headers)}");
