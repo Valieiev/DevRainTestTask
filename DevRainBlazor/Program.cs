@@ -2,6 +2,10 @@ using DevRain.DevRainBlazor;
 using DevRain.DevRainBlazor.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Azure.Functions.Authentication.WebAssembly;
+using Azure.Identity;
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.Azure;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -11,9 +15,13 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddScoped<FeedbackService>();
 
-builder.Services.AddMsalAuthentication(options =>
+builder.Services.AddAzureClients(x =>
 {
-    builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+    x.AddBlobServiceClient(new Uri("https://devrainstorageaccount.blob.core.windows.net"));
+    x.UseCredential(new DefaultAzureCredential());
 });
+
+builder.Services.AddStaticWebAppsAuthentication();
+
 
 await builder.Build().RunAsync();

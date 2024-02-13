@@ -71,7 +71,7 @@ namespace DevRain.DevRainBlazor.Services
         {
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync("/api/getFeedbacks/?"+ options);    
+                HttpResponseMessage response = await httpClient.GetAsync("/api/secured/getFeedbacks/?"+ options);    
 
                 if (response.IsSuccessStatusCode)
                 {

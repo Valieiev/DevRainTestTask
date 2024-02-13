@@ -1,15 +1,25 @@
-﻿<CascadingAuthenticationState>
+﻿﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
                     @if (context.User.Identity?.IsAuthenticated != true)
                     {
-                        <RedirectToLogin />
+                        <div class="row row-cols-1 row-cols-md-1 g-4 mt-5">
+                            <div class="col-md-6 h6">
+                                <div class="p-2 alert alert-danger" role="alert">This page does not exist or you do not have permission to access it. Please, log in.</div>
+                            </div>
+                        </div>
                     }
                     else
                     {
-                        <p role="alert">You are not authorized to access this resource.</p>
+                        <div class="jumbotron container mt-5">
+                            <div class="col-md-6 h6">
+                                <div class="p-2 alert alert-danger" role="alert">This page does not exist or you do not have permission to access it.</div>
+                            </div>
+                        </div>
                     }
                 </NotAuthorized>
             </AuthorizeRouteView>

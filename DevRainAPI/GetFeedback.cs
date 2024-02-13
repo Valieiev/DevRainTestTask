@@ -1,5 +1,6 @@
 using DevRainAPI.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Functions.Worker;
@@ -8,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Authentication;
+using System.Security.Claims;
 
 namespace DevRainAPI
 {
@@ -23,8 +26,12 @@ namespace DevRainAPI
         }
 
         [Function("GetFeedbacks")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req, ClaimsPrincipal principal)
         {
+            bool isClaimValid = true;
+            if (principal == null || !principal.Identity.IsAuthenticated) {
+                return new BadRequestObjectResult("Not authorized") ;
+            }
             try
             {
                 IQueryable<Feedback> queryableFeedbacks = _dbContext.Feedbacks.AsQueryable();

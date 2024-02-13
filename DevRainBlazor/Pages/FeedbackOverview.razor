@@ -1,4 +1,5 @@
 ﻿@page "/feedback-overview"
+@attribute [Authorize]
 
 @using DevRain.DevRainBlazor.Components
 @using DevRain.DevRainBlazor.Services
@@ -7,6 +8,7 @@
 @using System.Runtime.CompilerServices
 @using ChartJs.Blazor.PieChart
 @using ChartJs.Blazor.BarChart
+@using Microsoft.AspNetCore.Authorization
 @inject FeedbackService FeedbackService
 
 

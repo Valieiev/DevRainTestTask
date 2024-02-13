@@ -12,7 +12,7 @@ var host = new HostBuilder()
         services.ConfigureFunctionsApplicationInsights();
         services.AddDbContext<DevRainDBContext>(options =>
         {
-            options.UseSqlServer(Environment.GetEnvironmentVariable("DevRainDB", EnvironmentVariableTarget.Process));
+            options.UseSqlServer(Environment.GetEnvironmentVariable("DevRainDB", EnvironmentVariableTarget.Process), options => options.EnableRetryOnFailure());
         });
     })
     .Build();
