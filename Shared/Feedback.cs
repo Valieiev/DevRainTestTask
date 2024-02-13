@@ -41,4 +41,21 @@ namespace DevRain.Shared
         [Display(Name = "Neutral Score")]
         public decimal? NeutralScore { get; set; }
     }
+
+    public class FeedbackClientDataModel
+    {
+        [Required]
+        [StringLength(255)]
+        [Display(Name = "Full name")]
+        public string FullName { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        [Display(Name = "Company")]
+        public string Company { get; set; }
+
+        [Required]
+        [Display(Name = "Feedback")]
+        public string Text { get; set; }
+    }
 }

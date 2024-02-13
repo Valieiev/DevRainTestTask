@@ -98,5 +98,37 @@ namespace DevRain.DevRainBlazor.Services
                 throw new Exception("The server is not responding. Contact administrator." + ex.Message);
             }
         }
+
+        public async Task<List<FeedbackClientDataModel>> getTopFeedbacks()
+        {
+            try
+            {
+                HttpResponseMessage response = await httpClient.GetAsync("/api/getTopFeedbacks");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    String jsonResponse = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(jsonResponse))
+                    {
+                        return new List<FeedbackClientDataModel>();
+                    }
+                    else
+                    {
+                        List<FeedbackClientDataModel> feedbacks = JsonConvert.DeserializeObject<List<FeedbackClientDataModel>>(jsonResponse);
+                        return feedbacks;
+                    }
+                }
+                else
+                {
+                    throw new Exception(String.Format("Error occurred, the status code is: { 0 }",
+                response.StatusCode));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("The server is not responding. Contact administrator." + ex.Message);
+            }
+        }
     }
 }

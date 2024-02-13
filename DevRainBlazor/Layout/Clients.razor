@@ -50,7 +50,7 @@
 </div>
 
 @code {
-    private List<DevRain.Shared.Feedback> feedbacks;
+    private List<DevRain.Shared.FeedbackClientDataModel> feedbacks;
     private String errors = "";
 
     protected override async Task OnInitializedAsync()
@@ -70,13 +70,9 @@
 
     private async Task Getfeedbacks()
     {
-        var query = HttpUtility.ParseQueryString(string.Empty);
-        query["top"] = "3";
-        string filters = query.ToString();
-
         try
         {
-            feedbacks = await feedbackService.getFeedbacks(filters);
+            feedbacks = await feedbackService.getTopFeedbacks();
         }
         catch (Exception ex)
         {
