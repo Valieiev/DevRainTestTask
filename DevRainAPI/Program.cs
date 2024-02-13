@@ -1,4 +1,5 @@
 ﻿using DevRainAPI.Models;
+using DevRainAPI.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

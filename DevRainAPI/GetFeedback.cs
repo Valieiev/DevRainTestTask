@@ -1,4 +1,5 @@
 using DevRainAPI.Models;
+using DevRainAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -28,11 +29,11 @@ namespace DevRainAPI
 
         [Function("GetFeedbacks")]
         [Authorize]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req, ClaimsPrincipal principal)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "secured/GetFeedbacks")] HttpRequest req, ClaimsPrincipal clientPrincipal)
         {
-            bool isClaimValid = true;
-            if (principal == null || !principal.Identity.IsAuthenticated) {
-                return new BadRequestObjectResult(principal) ;
+
+            if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
+                return new BadRequestObjectResult(clientPrincipal) ;
             }
             try
             {
