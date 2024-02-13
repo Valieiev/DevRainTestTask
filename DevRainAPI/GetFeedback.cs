@@ -30,7 +30,7 @@ namespace DevRainAPI
         {
             bool isClaimValid = true;
             if (principal == null || !principal.Identity.IsAuthenticated) {
-                return new BadRequestObjectResult("Not authorized") ;
+                return new BadRequestObjectResult(principal) ;
             }
             try
             {

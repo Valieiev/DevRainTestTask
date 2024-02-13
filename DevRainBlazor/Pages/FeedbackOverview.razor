@@ -1,5 +1,5 @@
 ﻿@page "/feedback-overview"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "admin")]
 
 @using DevRain.DevRainBlazor.Components
 @using DevRain.DevRainBlazor.Services
