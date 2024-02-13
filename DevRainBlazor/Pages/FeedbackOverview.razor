@@ -284,7 +284,7 @@
                 }
             }
         };
-
+        _barConfig.Data.Labels.Add("Sentiment");
         foreach (KeyValuePair<string, int> mark in Marks)
         {
             BarDataset<int> dateSet = new BarDataset<int>([mark.Value])
