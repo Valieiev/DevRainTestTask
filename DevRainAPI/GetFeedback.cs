@@ -28,7 +28,8 @@ namespace DevRainAPI
         {
 
             if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
-                return new BadRequestObjectResult(req);
+
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(StaticWebAppsAuth.Parse(req)));
             }
             try
             {
