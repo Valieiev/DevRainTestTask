@@ -4,7 +4,7 @@
 <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn" href="/.auth/logout?post_logout_redirect_uri=/#company">Log out</button>
+        <a class="nav-link btn" href="/.auth/logout?post_logout_redirect_uri=/#company">Log out</a>
     </Authorized>
     <NotAuthorized>
         <a class="nav-link btn" href="/.auth/login/aad?post_login_redirect_uri=/#company">Log in</a>
