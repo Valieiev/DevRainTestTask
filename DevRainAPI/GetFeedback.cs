@@ -26,17 +26,13 @@ namespace DevRainAPI
         {
             try
             {
-                _logger.LogInformation("Function triggered.");
-                _logger.LogInformation($"Headers: {JsonConvert.SerializeObject(req.Headers)}");
+
 
                 ClaimsPrincipal clientPrincipal = StaticWebAppsAuth.Parse(req);
 
-                _logger.LogInformation($"Claims: {JsonConvert.SerializeObject(clientPrincipal.Claims)}");
-
-                if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated)
+                if (!clientPrincipal.IsInRole("admin"))
                 {
-
-                    return new BadRequestObjectResult(clientPrincipal?.Identity?.Name);
+                    return new UnauthorizedObjectResult($"Hi {clientPrincipal.Identity.Name}. You are not authorized to access this function.");
                 }
 
                 IQueryable<Feedback> queryableFeedbacks = _dbContext.Feedbacks.AsQueryable();
