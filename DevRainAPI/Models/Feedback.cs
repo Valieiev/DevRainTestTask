@@ -15,22 +15,23 @@ public partial class Feedback
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Full Name is required.")]
     [Column("fullName")]
     [StringLength(255)]
     public string FullName { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Email is required.")]
     [Column("email")]
+    [DataType(DataType.EmailAddress, ErrorMessage = "Invalid E-mail.")]
     [StringLength(255)]
     public string Email { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Company is required.")]
     [Column("company")]
     [StringLength(255)]
     public string Company { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Feedback is required.")]
     [Column("text")]
     public string Text { get; set; }
 
