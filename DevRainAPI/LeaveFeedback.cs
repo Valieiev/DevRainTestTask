@@ -36,10 +36,10 @@ namespace DevRainAPI
 
                 if(!isValid)
                 {
-                    String errors = "ERRORS:";
+                    String errors = "400 Bad Request:";
                     foreach (var validationResult in results)
                     {
-                        errors.Concat(validationResult.ErrorMessage);
+                        errors += ("\n" +validationResult.ErrorMessage);
                     }
 
                     return new BadRequestObjectResult(errors);
