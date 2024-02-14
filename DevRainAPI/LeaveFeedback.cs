@@ -36,7 +36,7 @@ namespace DevRainAPI
 
                 if(!isValid)
                 {
-                    String errors = "";
+                    String errors = "ERRORS:";
                     foreach (var validationResult in results)
                     {
                         errors.Concat(validationResult.ErrorMessage);
