@@ -32,7 +32,7 @@ namespace DevRainAPI
                 ValidationContext context = new ValidationContext(feedback, serviceProvider: null, items: null);
                 List<ValidationResult> results = new List<ValidationResult>();
 
-                bool isValid = Validator.TryValidateObject(feedback, context, results);
+                bool isValid = Validator.TryValidateObject(feedback, context, results,true);
 
                 if(!isValid)
                 {
