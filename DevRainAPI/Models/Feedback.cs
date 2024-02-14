@@ -22,7 +22,7 @@ public partial class Feedback
 
     [Required(ErrorMessage = "Email is required.")]
     [Column("email")]
-    [DataType(DataType.EmailAddress, ErrorMessage = "Invalid E-mail.")]
+    [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", ErrorMessage = "Please enter a valid email.")]
     [StringLength(255)]
     public string Email { get; set; }
 
