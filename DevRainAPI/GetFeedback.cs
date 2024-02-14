@@ -12,12 +12,10 @@ namespace DevRainAPI
 {
     public class GetFeedback
     {
-        private readonly ILogger<GetFeedback> _logger;
         private readonly DevRainDBContext _dbContext;
 
-        public GetFeedback(ILogger<GetFeedback> logger, DevRainDBContext devRainDBContext)
+        public GetFeedback( DevRainDBContext devRainDBContext)
         {
-            _logger = logger;
             _dbContext = devRainDBContext;
         }
 

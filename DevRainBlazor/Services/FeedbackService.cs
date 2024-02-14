@@ -18,7 +18,7 @@ namespace DevRain.DevRainBlazor.Services
             this.httpClient = httpClient;
         }
 
-        public async Task leaveFeedback(DevRain.Shared.Feedback feedback)
+        public async Task LeaveFeedback(DevRain.Shared.Feedback feedback)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace DevRain.DevRainBlazor.Services
             }
         }
 
-        public async Task<List<Feedback>> getFeedbacks()
+        public async Task<List<Feedback>> GetFeedbacks()
         {
             try
             {
@@ -67,7 +67,7 @@ namespace DevRain.DevRainBlazor.Services
             }
         }
 
-        public async Task<List<Feedback>> getFeedbacks(string options)
+        public async Task<List<Feedback>> GetFeedbacks(string options)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace DevRain.DevRainBlazor.Services
             }
         }
 
-        public async Task<List<FeedbackClientDataModel>> getTopFeedbacks()
+        public async Task<List<FeedbackClientDataModel>> GetTopFeedbacks()
         {
             try
             {

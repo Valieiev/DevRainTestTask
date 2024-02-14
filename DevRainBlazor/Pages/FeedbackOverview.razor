@@ -37,11 +37,11 @@
                         <div class="row">
                             <div class="col">
                                 <label>Start Date:</label>
-                                <input id="startDate" @bind=StartDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="Start Date" />
+                                <input id="startDate" @bind=startDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="Start Date" />
                             </div>
                             <div class="col">
                                 <label>End Date:</label>
-                                <input id="startDate" @bind=EndDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="End Date" />
+                                <input id="startDate" @bind=endDate @bind:after="GetFeedbacks" class="form-control" type="date" placeholder="End Date" />
                             </div>
                             @if (PageCount() > 1)
                             {
@@ -135,8 +135,8 @@
     }
     private int _pageSize = 5;
     private String errors = "";
-    private DateTime StartDate = DateTime.Now.AddYears(-1);
-    private DateTime EndDate = DateTime.Now;
+    private DateTime startDate = DateTime.Now.AddYears(-1);
+    private DateTime endDate = DateTime.Now;
 
     private bool previousBtnDisabled = true;
     private bool nextBtnDisabled = false;
@@ -160,12 +160,12 @@
     private async Task GetFeedbacks()
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
-        query["startDate"] = StartDate.ToString("yyyy-MM-dd");
-        query["endDate"] = EndDate.ToString("yyyy-MM-dd");
+        query["startDate"] = startDate.ToString("yyyy-MM-dd");
+        query["endDate"] = endDate.ToString("yyyy-MM-dd");
         string filters = query.ToString();
 
         try {
-            _feedBacks = await FeedbackService.getFeedbacks(filters);
+            _feedBacks = await FeedbackService.GetFeedbacks(filters);
             if (_feedBacks.Count > PageCount())
             {
                 showedFeedbacks = (List<DevRain.Shared.Feedback>)_feedBacks.Take(_pageSize).ToList();

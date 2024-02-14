@@ -9,12 +9,10 @@ namespace DevRainAPI
 {
     public class GetTopFeedbacks
     {
-        private readonly ILogger<GetTopFeedbacks> _logger;
         private readonly DevRainDBContext _dbContext;
 
-        public GetTopFeedbacks(ILogger<GetTopFeedbacks> logger, DevRainDBContext devRainDBContext)
+        public GetTopFeedbacks( DevRainDBContext devRainDBContext)
         {
-            _logger = logger;
             _dbContext = devRainDBContext;
         }
 
