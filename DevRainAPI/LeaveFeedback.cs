@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace DevRainAPI
 {
@@ -27,6 +28,22 @@ namespace DevRainAPI
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 Feedback feedback = JsonConvert.DeserializeObject<Feedback>(requestBody);
+
+                ValidationContext context = new ValidationContext(feedback, serviceProvider: null, items: null);
+                List<ValidationResult> results = new List<ValidationResult>();
+
+                bool isValid = Validator.TryValidateObject(feedback, context, results);
+
+                if(!isValid)
+                {
+                    String errors = "";
+                    foreach (var validationResult in results)
+                    {
+                        errors.Concat(validationResult.ErrorMessage);
+                    }
+
+                    return new BadRequestObjectResult(errors);
+                } 
 
                 //According to the latest information received, 
                 //Azure DB does not support the NewID() function on the INSERT statement; 

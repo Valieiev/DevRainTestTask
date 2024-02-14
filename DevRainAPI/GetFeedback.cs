@@ -47,15 +47,6 @@ namespace DevRainAPI
                     queryableFeedbacks = queryableFeedbacks.Where(feedback => feedback.CreatedDate <= endDateFilter.AddHours(24));
                 }
 
-
-                if (!string.IsNullOrEmpty(req.Query["top"]))
-                {
-                    if (int.TryParse(req.Query["top"], out _))
-                    {
-                        queryableFeedbacks = queryableFeedbacks.OrderByDescending(feedback => feedback.PositiveScore).Take(int.Parse(req.Query["top"]));
-                    }
-
-                }
                 List<Feedback> feedbacks = await queryableFeedbacks.OrderByDescending(x => x.PositiveScore).ToListAsync();
 
                 return new OkObjectResult(feedbacks);
