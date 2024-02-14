@@ -22,16 +22,18 @@ knowledge of Microsoft Azure and Azure AI Services.
 
 
 ## API Integration and Use of Postman:
-1. Demonstrate the API functionality using Postman collections and document the API endpoints. \
-   >[!NOTE]\
-   > The collection and environment are located in the PostmanCollection folder.
+1. Demonstrate the API functionality using Postman collections and document the API endpoints.
+ >[!NOTE]\
+ > The collection and environment are located in the PostmanCollection folder.
+
 2. Ensure API can handle various scenarios gracefully (e.g., invalid input, server errors). (Done)
 
 
 ## Decision Making and Problem-Solving:
 1. Provide documentation explaining the choice of technologies and architecture.
-   >[!NOTE]\
-   > See DevRain Test Task Solution Document.pdf
+ >[!NOTE]\
+ > See DevRain Test Task Solution Document.pdf
+
 2. Describe how non-trivial challenges were addressed during development:
  - Since the Static web app and isolated feature app do not exchange user credentials, when a user logs in, the x-ms-client-principal header is added to requests for user information through Static Web Apps edge nodes. Therefore, we must parse the x-ms-client-principal on the function side to retrieve user credentials.
  - Azure AI Services for sentiment analysis rate a message positively, even if it describes a problem but the customer is ready to help solve it.
