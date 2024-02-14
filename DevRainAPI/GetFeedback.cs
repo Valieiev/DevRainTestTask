@@ -1,6 +1,5 @@
 using DevRainAPI.Models;
 using DevRainAPI.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -23,22 +22,23 @@ namespace DevRainAPI
         }
 
         [Function("GetFeedbacks")]
-        [Authorize]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "secured/GetFeedbacks")] HttpRequest req)
         {
-            _logger.LogInformation("Function triggered.");
-            _logger.LogInformation($"Headers: {JsonConvert.SerializeObject(req.Headers)}");
-
-            ClaimsPrincipal clientPrincipal = StaticWebAppsAuth.Parse(req);
-
-            _logger.LogInformation($"Claims: {JsonConvert.SerializeObject(clientPrincipal.Claims)}");
-
-            if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated) {
-
-                return new BadRequestObjectResult(clientPrincipal?.Identity?.Name);
-            }
             try
             {
+                _logger.LogInformation("Function triggered.");
+                _logger.LogInformation($"Headers: {JsonConvert.SerializeObject(req.Headers)}");
+
+                ClaimsPrincipal clientPrincipal = StaticWebAppsAuth.Parse(req);
+
+                _logger.LogInformation($"Claims: {JsonConvert.SerializeObject(clientPrincipal.Claims)}");
+
+                if (clientPrincipal == null || !clientPrincipal.Identity.IsAuthenticated)
+                {
+
+                    return new BadRequestObjectResult(clientPrincipal?.Identity?.Name);
+                }
+
                 IQueryable<Feedback> queryableFeedbacks = _dbContext.Feedbacks.AsQueryable();
 
                 if (!string.IsNullOrEmpty(req.Query["startDate"]))
